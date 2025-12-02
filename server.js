@@ -29,6 +29,7 @@ const server = http.createServer((req, res) => {
         endpoints: {
           health: "/api/health",
           products: "/api/products?min=5000&max=20000",
+          blindBoxes: "/api/blindboxes",
         },
       })
     );
@@ -44,7 +45,7 @@ const server = http.createServer((req, res) => {
       { id: 3, name: "平板", price: 15900 },
       { id: 4, name: "耳機", price: 2990 },
       { id: 5, name: "螢幕", price: 6990 },
-       { id: 6, name: "Dell大螢幕", price: 12990 },
+      { id: 6, name: "Dell大螢幕", price: 12990 },
     ];
 
     // 解析 URL 和 query 參數
@@ -70,6 +71,26 @@ const server = http.createServer((req, res) => {
 
     res.statusCode = 200;
     res.end(JSON.stringify(result));
+    return;
+  }
+
+  // 盲盒查詢 API 
+  if (req.url === "/api/blindboxes" && req.method === "GET") {
+    const blindBoxes = [
+      { id: 'bb-01', name: "盲盒禮物包 M 號", qty: 7 },
+      { id: 'bb-02', name: "盲盒禮物包 L 號", qty: 25 },
+      { id: 'bb-03', name: "盲盒禮物包 XL 號", qty: 8 },
+    ];
+
+    const totalBoxQty = blindBoxes.reduce((acc, box) => (acc + box.qty), 0)
+
+    res.statusCode = 200;
+    res.end(
+      JSON.stringify({
+        totalBoxQty,
+        blindBoxes
+      })
+    );
     return;
   }
 
